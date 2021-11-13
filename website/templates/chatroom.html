@@ -1,0 +1,82 @@
+<html>
+<head>
+<link rel="stylesheet" href={{ url_for('static',filename='bootstrap.min.css') }}>
+<script type="text/javascript" src={{url_for('static',filename='jquery.min.js')}}></script>
+<title>chatroom</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+ <div class="container-fluid">
+  <div class="navbar-nav">
+   <a class="nav-item nav-link" href="/home">Home</a>
+  </div>
+ </div>
+</nav>
+<br>
+
+<div>
+<h2 align="center"> {{chatroom}}</h>
+</div>
+<div id ="container">
+</div>
+<script type="text/javascript">
+ var lastIndex = {{curr_index}}
+window.setInterval(function(){
+$.ajax({
+ url : "/get-json/{{chatroom}}/{{username}}",
+ type : "POST",
+ dataType : "json",
+ contentType : "application/json",
+ data : JSON.stringify({
+  "json_index" : lastIndex
+ }),
+ success : function(res){
+  console.log(res);
+  document.getElementById("message").value = "" ;
+  lastIndex = res["index"]
+  for(var i=0; i<res["usernames"].length;i++){
+       document.getElementById("container").innerHTML = document.getElementById("container").innerHTML + 
+       `<br/>
+        <div class="card border-dark">
+        <div class = "card-header d-flex justify-content-between ">
+        <h3>${res["usernames"][i]} </h>
+        </div>
+        <div class="card-body">
+        <div class="card-text">
+        <p><b>${res["messages"][i]}</b></p>
+        <p><b>${res["time"][i]}</b></p>
+        </div></div></div><br/>`
+ }}
+});
+},1000);
+</script>
+<div class="card border-dark">
+<div class = "card-header d-flex justify-content-between ">
+<div class="input-group mb-3 "  >
+ <input type="text" id="message" name="message" placeholder="Message" class="form-control"/>
+  <button onclick="post()" class="btn btn-success" >Send</button>
+</div>
+</div></div>
+
+<script type="text/javascript">
+ function post(){
+  var message = document.getElementById("message").value;
+  console.log(message)
+  $.ajax({
+  url : "/send-message/{{chatroom}}/{{username}}",
+  type : "POST",
+  dataType : "json",
+  contentType : "application/json",
+  data : JSON.stringify ({
+    "message" : message
+  }),
+  success : function(res){
+    console.log(res);
+ }
+  });
+}
+</script>
+
+</body>
+</html>

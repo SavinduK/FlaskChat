@@ -1,0 +1,34 @@
+{% extends "base.html"%}
+{% block title %}Home{% endblock %}
+{% block content %}
+<br>
+<form method ="POST">
+<h3 align="center">Join-Chatroom</h>
+<div class="form-group">
+<br>
+ <label for="chatroom">ChatRoom</label>
+ <input
+  type="text"
+  id="chatroom"
+  name="chatroom"
+  class="form-control"
+  placeholder="Chatroom"
+ />
+<br>
+ <label for="username">UserName</label>
+ <input
+  type="text"
+  id="username"
+  name="username"
+  class="form-control"
+  placeholder="Username"
+ />
+<br>
+<div align="center">
+<button class="btn btn-primary" type="submit">Join</button>
+</div>
+</div>
+</form>
+ 
+
+{% endblock %}
